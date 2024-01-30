@@ -8,6 +8,8 @@ server.register(cors)
 
 dotenv.config()
 
+const port = Number(process.env.PORT) || 3333;
+
 const oAuth2Client = new OAuth2Client(
   '803737317498-cb4apvh2fh5i6eei77vddooop7r5j3lm.apps.googleusercontent.com',
   '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',
@@ -30,6 +32,6 @@ server.post("/google", async (req, res) => {
 })
 
 server.listen(
-  { port: 3333 },
+  { port },
   (err, address) => console.log(`Server listening at ${address}`)
 )
