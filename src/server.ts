@@ -3,8 +3,8 @@ import dotenv from 'dotenv';
 import Fastify from "fastify";
 import { OAuth2Client } from 'google-auth-library';
 
-const server = Fastify()
-server.register(cors)
+const app = Fastify()
+app.register(cors)
 
 dotenv.config()
 
@@ -16,11 +16,11 @@ const oAuth2Client = new OAuth2Client(
   'postmessage',
 );
 
-server.get("/", (req, res) => {
+app.get("/", (req, res) => {
   res.send({ ok: false })
 })
 
-server.post("/google", async (req, res) => {
+app.post("/google", async (req, res) => {
   try {
     if (!req.body?.code) res.send({ ok: false, body: req.body })
     const { tokens } = await oAuth2Client.getToken(req.body.code)
@@ -31,7 +31,9 @@ server.post("/google", async (req, res) => {
   }
 })
 
-server.listen(
-  { port },
-  (err, address) => console.log(`Server listening at ${address}`)
-)
+app.listen({
+  host: '0.0.0.0',
+  port: process.env.PORT ? Number(process.env.PORT) : 3333
+}).then(() => {
+  console.log('HTTP app runnig in http://localhost:3333')
+})
